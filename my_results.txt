@@ -1,0 +1,178 @@
+Sharon Chibuzor Mbionwu - 2026/A/MIT/0060 - ststephen - generated Thu Nov 12 21:02:43 UTC 2026
+
+######## P1 row counts
+---------------+-------
+ courses       |   108
+ departments   |     8
+ exams         |  1524
+ faculties     |     4
+ fee_payments  |  1040
+ lecturers     |    12
+ offerings     |   508
+ registrations | 59165
+ results       | 25933
+ students      |  1020
+(10 rows)
+
+--- 05_constraint_tests.sql
+
+######## P1 constraint tests
+psql:05_constraint_tests.sql:58: NOTICE:  TEST 1 PASS (SQLSTATE 23503)
+psql:05_constraint_tests.sql:93: NOTICE:  TEST 2 PASS (SQLSTATE 23503)
+psql:05_constraint_tests.sql:142: NOTICE:  TEST 3 PASS (SQLSTATE 23505)
+psql:05_constraint_tests.sql:172: NOTICE:  TEST 4 PASS (SQLSTATE 23514)
+psql:05_constraint_tests.sql:204: NOTICE:  TEST 5 PASS (SQLSTATE 23514)
+psql:05_constraint_tests.sql:267: NOTICE:  TEST 6 PASS (SQLSTATE 23514)
+psql:05_constraint_tests.sql:326: NOTICE:  TEST 7 PASS (SQLSTATE 23503)
+psql:05_constraint_tests.sql:381: NOTICE:  TEST 8 PASS (SQLSTATE 23514)
+psql:05_constraint_tests.sql:437: NOTICE:  TEST 9 PASS (SQLSTATE 23505)
+psql:05_constraint_tests.sql:483: NOTICE:  TEST 10 PASS (SQLSTATE 23514)
+psql:05_constraint_tests.sql:535: NOTICE:  TEST 11 (control) PASS — registration_id = 59171
+
+######## P2 queries, plans and times
+--- 01_queries.sql
+------------------+---------------+-------------+----------------------------------+-----------+-------+------------------------------
+------------------+-----------------+--------+----------------------------------------+-------------+--------+-------------
+-----------------+--------------------+-------------+----------------------------------+----------+---------------+----------+----------+------------+----------+--------------
+------------------+------------------+-------------+-------------------------------+------------------------
+-------------+--------------------------------+----------+-----------+--------------
+-----------------+------------------------------+----------+--------+---------------
+------------------+------------------+------------------------------+---------------+------------+---------------
+-----------------+-------------------+------------------------------+----------------------+------------------
+--- 02_explain_analyze.sql
+PHASE 1 — DROPPING P2 selective indexes
+PHASE 2 — EXPLAIN (ANALYZE, BUFFERS) WITHOUT indexes
+--- Q1 (one student transcript) without idx_result_student_graded ---
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Execution Time: 0.700 ms
+--- Q2 (one department students) without idx_student_department ---
+--------------------------------------------------------------------------------------------------------------------
+         ->  Seq Scan on student s  (cost=0.00..17.62 rows=1 width=278) (actual time=0.006..0.221 rows=130 loops=1)
+ Execution Time: 0.297 ms
+--- Q3 (one lecturer offerings) without idx_offering_lecturer ---
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Execution Time: 0.177 ms
+--- Q4 (last 30 days registrations) without idx_registration_recent ---
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                 ->  Seq Scan on student s  (cost=0.00..17.10 rows=210 width=62) (actual time=0.009..0.158 rows=1020 loops=1)
+ Execution Time: 22.745 ms
+PHASE 3 — RE-CREATING P2 selective indexes
+PHASE 4 — EXPLAIN (ANALYZE, BUFFERS) WITH indexes
+--- Q1 (one student transcript) with idx_result_student_graded ---
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Execution Time: 0.544 ms
+--- Q2 (one department students) with idx_student_department ---
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Execution Time: 0.195 ms
+--- Q3 (one lecturer offerings) with idx_offering_lecturer ---
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+               ->  Index Scan using idx_offering_lecturer on course_offering o  (cost=0.15..9.10 rows=44 width=26) (actual time=0.013..0.021 rows=44 loops=1)
+ Execution Time: 0.176 ms
+--- Q4 (last 30 days registrations) with idx_registration_recent ---
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                     ->  Index Scan using idx_registration_recent on registration r  (cost=0.29..1971.18 rows=8856 width=16) (actual time=0.028..0.046 rows=30 loops=1)
+ Execution Time: 0.220 ms
+PHASE 5 — Aggregate query (Seq Scan stays optimal)
+--- Q5 (avg FINAL score per course) — expect Seq Scan regardless ---
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+                     ->  Index Scan using idx_result_exam on result r  (cost=0.29..9.18 rows=51 width=10) (actual time=0.002..0.011 rows=51 loops=508)
+ Execution Time: 18.582 ms
+
+######## P3 transactions
+=== A. COMMITTED transaction ===
+=== B. ROLLED-BACK transaction ===
+=== C. SAVEPOINT recovery ===
+
+######## P3 race demos
+PART 1 — THE BUG (no lock, two students take the last place)
+  T1 outcome: ('COMMITTED', None)
+  T2 outcome: ('COMMITTED', None)
+  Active rows after = 2  (capacity = 1)
+  >>> BUG REPRODUCED: capacity=1 but two ACTIVE rows committed.
+PART 2 — CONSTRAINT FIX (counter row + CHECK(active_count <= capacity))
+  T1 outcome: ('FAILED', '23514', 'new row for relation "race_demo_capacity" violates check constraint "race_demo_capacity_check"\nDETAIL:  Failing row cont')
+  T2 outcome: ('COMMITTED', None)
+  Active rows after = 1  (capacity = 1)
+  >>> FIX CONFIRMED: only one ACTIVE row landed.
+PART 3 — ADVISORY LOCK FIX (pg_advisory_xact_lock(offering_id))
+  T1 outcome: ('FAILED', '23514', 'offering 523 is full (capacity 1, active 1)\nCONTEXT:  PL/pgSQL function enforce_capacity() line 17 at RAISE')
+  T2 outcome: ('COMMITTED', None)
+  Active rows after = 1  (capacity = 1)
+  >>> FIX CONFIRMED: only one ACTIVE row landed; the other was blocked.
+PART 4 — SERIALIZABLE isolation (expects SQLSTATE 40001)
+  T1 outcome: ('COMMITTED', None)
+  T2 outcome: ('ABORTED', '40001', 'could not serialize access due to read/write dependencies among transactions\nDETAIL:  Reason code: Canceled on identific')
+  >>> PASS: at least one transaction aborted with SQLSTATE 40001.
+PART 5 — READ COMMITTED vs REPEATABLE READ (snapshot behaviour)
+      >>> PASS: READ COMMITTED saw the writer's committed value.
+      >>> PASS: REPEATABLE READ kept the snapshot value.
+PART 6 — DEADLOCK (40P01) and the fixed-order version
+      T1 outcome: ('COMMITTED', None)
+      T2 outcome: ('ABORTED', '40P01', 'deadlock detected\nDETAIL:  Process 18716 waits for ShareLock on transaction 857; blocked by process 18715.\nProcess 18715')
+      >>> PASS: PostgreSQL detected the deadlock (SQLSTATE 40P01).
+      T1 outcome: ('COMMITTED', None)
+      T2 outcome: ('COMMITTED', None)
+      >>> PASS: both transactions committed without a deadlock.
+
+######## P4 MongoDB
+VALIDATOR PASS: rejected invalid document (score above max_score / wrong types) code=121
+VALIDATOR PASS: rejected invalid document (unknown extra field) code=121
+Inserted 40000 docs in 948 ms (batches of 1000)
+Query target: student_id=500, exam_type=RESIT
+Stage BEFORE: COLLSCAN
+Docs  BEFORE: 40000 examined
+Time  BEFORE: 13 ms
+Rows  BEFORE: 39 returned
+Stage AFTER: IXSCAN
+Docs  AFTER: 39 examined
+Time  AFTER: 1 ms
+Rows  AFTER: 39 returned
+Stage BEFORE: COLLSCAN   | Docs BEFORE: 40000   | Time ms BEFORE: 13
+Stage AFTER : IXSCAN   | Docs AFTER : 39   | Time ms AFTER : 1
+
+######## P5 partitions
+psql:01_partitioning.sql:105: NOTICE:  Partition range: 2025-11-01 to 2027-01-01
+psql:01_partitioning.sql:105: NOTICE:  Created monthly partitions plus DEFAULT partition
+ registration_p_2025_11 |  594
+ registration_p_2025_12 | 3208
+ registration_p_2026_01 | 3988
+ registration_p_2026_02 | 3472
+ registration_p_2026_03 | 3095
+ registration_p_2026_04 | 4197
+ registration_p_2026_05 | 3514
+ registration_p_2026_06 | 3428
+ registration_p_2026_07 | 5752
+ registration_p_2026_08 | 7428
+ registration_p_2026_09 | 7488
+ registration_p_2026_10 | 7166
+ registration_p_2026_11 | 5796
+ registration_p_2026_12 |   41
+               Subplans Removed: 15
+               ->  Seq Scan on registration_p_2026_10 registration_p_1  (cost=0.00..187.65 rows=24 width=54) (actual time=0.008..2.779 rows=7166 loops=1)
+ Execution Time: 4.119 ms
+
+######## P5 replica
+== start replica on port 55432 ==
+Replica is up (port 55432). Next: psql -d ststephen -f 03_replica_tests.sql
+=== 1. Who is who: primary on port 5432 ===
+ port | is_replica 
+=== 2. Who is who: replica on port 55432 ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "55432".
+ port  | is_replica 
+=== 3. A write on the replica must be REJECTED (read-only) ===
+psql:03_replica_tests.sql:15: ERROR:  cannot execute INSERT in a read-only transaction
+=== 4. Insert on the primary ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "5432".
+ RPL          | Replica Test Faculty
+=== 5. The row has arrived on the replica ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "55432".
+ RPL          | Replica Test Faculty
+ registrations_on_replica 
+=== 6. Replication lag, seen on the replica ===
+ received_lsn | replayed_lsn |  replay_delay   
+=== 7. pg_stat_replication, seen on the primary ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "5432".
+   state   | sync_state | sent_lsn  | replay_lsn |   replay_lag    
+ streaming | async      | 0/7000990 | 0/7000990  | 00:00:00.240673
+ registrations_on_primary 
+=== 8. Clean up the test row on the primary ===
