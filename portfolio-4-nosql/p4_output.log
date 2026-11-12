@@ -1,0 +1,258 @@
+--- 01_setup.js
+01_setup.js loaded OK
+Collections in ststephen: ["exam_attempts","course_catalogue"]
+course_catalogue count: 0
+exam_attempts   count: 0
+--- 02_data_and_queries.js
+Seeded course_catalogue: 4 docs
+Seeded exam_attempts:    320 docs
+
+=== Q1 — Pass rate per exam_type ===
+[
+  {
+    _id: 'CA',
+    attempts: 80,
+    passed: 56,
+    pass_rate_pct: 70,
+    avg_score: 60.09
+  },
+  {
+    _id: 'FINAL',
+    attempts: 80,
+    passed: 52,
+    pass_rate_pct: 65,
+    avg_score: 55.19
+  },
+  {
+    _id: 'MIDSEM',
+    attempts: 80,
+    passed: 51,
+    pass_rate_pct: 63.75,
+    avg_score: 53.94
+  },
+  {
+    _id: 'RESIT',
+    attempts: 80,
+    passed: 58,
+    pass_rate_pct: 72.5,
+    avg_score: 57.05
+  }
+]
+
+=== Q2 — Top-5 courses by number of attempts ===
+[
+  {
+    attempts: 80,
+    course_code: 'CSC301',
+    avg_score: 57.3,
+    max_score: 99.7,
+    min_score: 20.64
+  },
+  {
+    attempts: 80,
+    course_code: 'BUS101',
+    avg_score: 59.61,
+    max_score: 98.62,
+    min_score: 21.12
+  },
+  {
+    attempts: 80,
+    course_code: 'CIV101',
+    avg_score: 54.12,
+    max_score: 98.98,
+    min_score: 21.07
+  },
+  {
+    attempts: 80,
+    course_code: 'MCO101',
+    avg_score: 55.24,
+    max_score: 98.68,
+    min_score: 20.58
+  }
+]
+
+=== Q3 — Average FINAL score per student (enriched with course title) ===
+[
+  {
+    attempts: 1,
+    student_id: 1,
+    course_code: 'BUS101',
+    course_title: 'Principles of Management',
+    faculty: 'MGT',
+    avg_score: 71.88
+  },
+  {
+    attempts: 1,
+    student_id: 1,
+    course_code: 'CIV101',
+    course_title: 'Engineering Mechanics',
+    faculty: 'ENG',
+    avg_score: 66.51
+  },
+  {
+    attempts: 1,
+    student_id: 1,
+    course_code: 'CSC301',
+    course_title: 'Database Systems',
+    faculty: 'SCI',
+    avg_score: 44.43
+  },
+  {
+    attempts: 1,
+    student_id: 1,
+    course_code: 'MCO101',
+    course_title: 'Introduction to Mass Media',
+    faculty: 'ART',
+    avg_score: 98.68
+  },
+  {
+    attempts: 1,
+    student_id: 2,
+    course_code: 'BUS101',
+    course_title: 'Principles of Management',
+    faculty: 'MGT',
+    avg_score: 24.68
+  },
+  {
+    attempts: 1,
+    student_id: 2,
+    course_code: 'CIV101',
+    course_title: 'Engineering Mechanics',
+    faculty: 'ENG',
+    avg_score: 37.19
+  },
+  {
+    attempts: 1,
+    student_id: 2,
+    course_code: 'CSC301',
+    course_title: 'Database Systems',
+    faculty: 'SCI',
+    avg_score: 59.5
+  },
+  {
+    attempts: 1,
+    student_id: 2,
+    course_code: 'MCO101',
+    course_title: 'Introduction to Mass Media',
+    faculty: 'ART',
+    avg_score: 45.03
+  },
+  {
+    attempts: 1,
+    student_id: 3,
+    course_code: 'BUS101',
+    course_title: 'Principles of Management',
+    faculty: 'MGT',
+    avg_score: 39.06
+  },
+  {
+    attempts: 1,
+    student_id: 3,
+    course_code: 'CIV101',
+    course_title: 'Engineering Mechanics',
+    faculty: 'ENG',
+    avg_score: 78.29
+  },
+  {
+    attempts: 1,
+    student_id: 3,
+    course_code: 'CSC301',
+    course_title: 'Database Systems',
+    faculty: 'SCI',
+    avg_score: 78.73
+  },
+  {
+    attempts: 1,
+    student_id: 3,
+    course_code: 'MCO101',
+    course_title: 'Introduction to Mass Media',
+    faculty: 'ART',
+    avg_score: 32.25
+  },
+  {
+    attempts: 1,
+    student_id: 4,
+    course_code: 'BUS101',
+    course_title: 'Principles of Management',
+    faculty: 'MGT',
+    avg_score: 47.6
+  },
+  {
+    attempts: 1,
+    student_id: 4,
+    course_code: 'CIV101',
+    course_title: 'Engineering Mechanics',
+    faculty: 'ENG',
+    avg_score: 90.95
+  },
+  {
+    attempts: 1,
+    student_id: 4,
+    course_code: 'CSC301',
+    course_title: 'Database Systems',
+    faculty: 'SCI',
+    avg_score: 42.56
+  },
+  {
+    attempts: 1,
+    student_id: 4,
+    course_code: 'MCO101',
+    course_title: 'Introduction to Mass Media',
+    faculty: 'ART',
+    avg_score: 24.4
+  },
+  {
+    attempts: 1,
+    student_id: 5,
+    course_code: 'BUS101',
+    course_title: 'Principles of Management',
+    faculty: 'MGT',
+    avg_score: 61.75
+  },
+  {
+    attempts: 1,
+    student_id: 5,
+    course_code: 'CIV101',
+    course_title: 'Engineering Mechanics',
+    faculty: 'ENG',
+    avg_score: 27.84
+  },
+  {
+    attempts: 1,
+    student_id: 5,
+    course_code: 'CSC301',
+    course_title: 'Database Systems',
+    faculty: 'SCI',
+    avg_score: 83.51
+  },
+  {
+    attempts: 1,
+    student_id: 5,
+    course_code: 'MCO101',
+    course_title: 'Introduction to Mass Media',
+    faculty: 'ART',
+    avg_score: 70.35
+  }
+]
+
+02_data_and_queries.js finished
+VALIDATOR PASS: rejected invalid document (score above max_score / wrong types) code=121
+VALIDATOR PASS: rejected invalid document (unknown extra field) code=121
+--- 03_bulk_and_index_demo.js
+Inserted 40000 docs in 948 ms (batches of 1000)
+Query target: student_id=500, exam_type=RESIT
+Stage BEFORE: COLLSCAN
+Docs  BEFORE: 40000 examined
+Time  BEFORE: 13 ms
+Rows  BEFORE: 39 returned
+Created compound index idx_student_exam on (student_id, exam_type)
+Stage AFTER: IXSCAN
+Docs  AFTER: 39 examined
+Time  AFTER: 1 ms
+Rows  AFTER: 39 returned
+
+================ SUMMARY ================
+Stage BEFORE: COLLSCAN   | Docs BEFORE: 40000   | Time ms BEFORE: 13
+Stage AFTER : IXSCAN   | Docs AFTER : 39   | Time ms AFTER : 1
+=========================================
+03_bulk_and_index_demo.js finished
