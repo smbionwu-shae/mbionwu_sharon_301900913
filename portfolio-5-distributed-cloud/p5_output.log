@@ -1,0 +1,121 @@
+SET
+psql:01_partitioning.sql:32: NOTICE:  table "registration_p" does not exist, skipping
+DROP TABLE
+CREATE TABLE
+CREATE INDEX
+psql:01_partitioning.sql:105: NOTICE:  Partition range: 2025-11-01 to 2027-01-01
+psql:01_partitioning.sql:105: NOTICE:  Created monthly partitions plus DEFAULT partition
+DO
+INSERT 0 59167
+=== Rows per partition ===
+     partition_name     | rows 
+------------------------+------
+ registration_p_2025_11 |  594
+ registration_p_2025_12 | 3208
+ registration_p_2026_01 | 3988
+ registration_p_2026_02 | 3472
+ registration_p_2026_03 | 3095
+ registration_p_2026_04 | 4197
+ registration_p_2026_05 | 3514
+ registration_p_2026_06 | 3428
+ registration_p_2026_07 | 5752
+ registration_p_2026_08 | 7428
+ registration_p_2026_09 | 7488
+ registration_p_2026_10 | 7166
+ registration_p_2026_11 | 5796
+ registration_p_2026_12 |   41
+(14 rows)
+
+=== EXPLAIN ANALYZE — one-month range query (last month) ===
+                                                                           QUERY PLAN                                                                           
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=1637.47..1637.59 rows=50 width=54) (actual time=4.085..4.091 rows=50 loops=1)
+   Buffers: shared hit=54
+   ->  Sort  (cost=1637.47..1638.00 rows=213 width=54) (actual time=4.084..4.086 rows=50 loops=1)
+         Sort Key: registration_p.registered_at
+         Sort Method: top-N heapsort  Memory: 31kB
+         Buffers: shared hit=54
+         ->  Append  (cost=0.00..1630.39 rows=213 width=54) (actual time=0.008..3.229 rows=7166 loops=1)
+               Buffers: shared hit=54
+               Subplans Removed: 15
+               ->  Seq Scan on registration_p_2026_10 registration_p_1  (cost=0.00..187.65 rows=24 width=54) (actual time=0.008..2.779 rows=7166 loops=1)
+                     Filter: ((registered_at < date_trunc('month'::text, now())) AND (registered_at >= date_trunc('month'::text, (now() - '1 mon'::interval))))
+                     Buffers: shared hit=54
+ Planning:
+   Buffers: shared hit=7
+ Planning Time: 0.574 ms
+ Execution Time: 4.119 ms
+(16 rows)
+
+01_partitioning.sql finished
+Cluster is already running.
+== pg_basebackup from the primary (Unix socket) ==
+== start replica on port 55432 ==
+waiting for server to start.... done
+server started
+/var/run/postgresql:55432 - accepting connections
+Replica is up (port 55432). Next: psql -d ststephen -f 03_replica_tests.sql
+Pager usage is off.
+=== 1. Who is who: primary on port 5432 ===
+You are now connected to database "ststephen" as user "codespace".
+ port | is_replica 
+------+------------
+ 5432 | f
+(1 row)
+
+=== 2. Who is who: replica on port 55432 ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "55432".
+ port  | is_replica 
+-------+------------
+ 55432 | t
+(1 row)
+
+=== 3. A write on the replica must be REJECTED (read-only) ===
+psql:03_replica_tests.sql:15: ERROR:  cannot execute INSERT in a read-only transaction
+=== 4. Insert on the primary ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "5432".
+DELETE 0
+INSERT 0 1
+ faculty_code |     faculty_name     
+--------------+----------------------
+ RPL          | Replica Test Faculty
+(1 row)
+
+ pg_sleep 
+----------
+ 
+(1 row)
+
+=== 5. The row has arrived on the replica ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "55432".
+ faculty_code |     faculty_name     
+--------------+----------------------
+ RPL          | Replica Test Faculty
+(1 row)
+
+ registrations_on_replica 
+--------------------------
+                    59167
+(1 row)
+
+=== 6. Replication lag, seen on the replica ===
+ received_lsn | replayed_lsn |  replay_delay   
+--------------+--------------+-----------------
+ 0/7000990    | 0/7000990    | 00:00:01.021189
+(1 row)
+
+=== 7. pg_stat_replication, seen on the primary ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "5432".
+   state   | sync_state | sent_lsn  | replay_lsn |   replay_lag    
+-----------+------------+-----------+------------+-----------------
+ streaming | async      | 0/7000990 | 0/7000990  | 00:00:00.240673
+(1 row)
+
+ registrations_on_primary 
+--------------------------
+                    59167
+(1 row)
+
+=== 8. Clean up the test row on the primary ===
+DELETE 1
+03_replica_tests.sql finished

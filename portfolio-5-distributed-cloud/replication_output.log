@@ -1,0 +1,71 @@
+Cluster is already running.
+== pg_basebackup from the primary (Unix socket) ==
+== start replica on port 55432 ==
+waiting for server to start.... done
+server started
+/var/run/postgresql:55432 - accepting connections
+Replica is up (port 55432). Next: psql -d ststephen -f 03_replica_tests.sql
+Pager usage is off.
+=== 1. Who is who: primary on port 5432 ===
+You are now connected to database "ststephen" as user "codespace".
+ port | is_replica 
+------+------------
+ 5432 | f
+(1 row)
+
+=== 2. Who is who: replica on port 55432 ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "55432".
+ port  | is_replica 
+-------+------------
+ 55432 | t
+(1 row)
+
+=== 3. A write on the replica must be REJECTED (read-only) ===
+psql:03_replica_tests.sql:15: ERROR:  cannot execute INSERT in a read-only transaction
+=== 4. Insert on the primary ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "5432".
+DELETE 0
+INSERT 0 1
+ faculty_code |     faculty_name     
+--------------+----------------------
+ RPL          | Replica Test Faculty
+(1 row)
+
+ pg_sleep 
+----------
+ 
+(1 row)
+
+=== 5. The row has arrived on the replica ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "55432".
+ faculty_code |     faculty_name     
+--------------+----------------------
+ RPL          | Replica Test Faculty
+(1 row)
+
+ registrations_on_replica 
+--------------------------
+                    59167
+(1 row)
+
+=== 6. Replication lag, seen on the replica ===
+ received_lsn | replayed_lsn |  replay_delay   
+--------------+--------------+-----------------
+ 0/7000990    | 0/7000990    | 00:00:01.021189
+(1 row)
+
+=== 7. pg_stat_replication, seen on the primary ===
+You are now connected to database "ststephen" as user "codespace" via socket in "/var/run/postgresql" at port "5432".
+   state   | sync_state | sent_lsn  | replay_lsn |   replay_lag    
+-----------+------------+-----------+------------+-----------------
+ streaming | async      | 0/7000990 | 0/7000990  | 00:00:00.240673
+(1 row)
+
+ registrations_on_primary 
+--------------------------
+                    59167
+(1 row)
+
+=== 8. Clean up the test row on the primary ===
+DELETE 1
+03_replica_tests.sql finished
