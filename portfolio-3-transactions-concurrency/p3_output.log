@@ -1,0 +1,101 @@
+SET
+DELETE 0
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 2
+=== A. COMMITTED transaction ===
+BEGIN
+INSERT 0 1
+COMMIT
+               message                
+--------------------------------------
+ A: committed registration exists = 1
+(1 row)
+
+=== B. ROLLED-BACK transaction ===
+      message       
+--------------------
+ B: rows before = 0
+(1 row)
+
+BEGIN
+INSERT 0 1
+ROLLBACK
+          message           
+----------------------------
+ B: rows after rollback = 0
+(1 row)
+
+=== C. SAVEPOINT recovery ===
+INSERT 0 1
+psql:01_transactions.sql:178: NOTICE:  C: second insert failed as expected: offering 520 is full (capacity 1, active 1)
+psql:01_transactions.sql:178: NOTICE:  C: recovered to savepoint; first insert remains valid
+psql:01_transactions.sql:178: NOTICE:  C: active rows in capacity-1 offering = 1
+DO
+                     message                      
+--------------------------------------------------
+ C: active rows in SUMMER capacity-1 offering = 1
+(1 row)
+
+01_transactions.sql finished
+race_demos.py — St. Stephen USMS concurrency demonstrations
+DSN: dbname=ststephen
+======================================================================
+PART 1 — THE BUG (no lock, two students take the last place)
+======================================================================
+  offering_id=521  capacity=1  student_A=1030  student_B=1031
+  T1 outcome: ('COMMITTED', None)
+  T2 outcome: ('COMMITTED', None)
+  Active rows after = 2  (capacity = 1)
+  >>> BUG REPRODUCED: capacity=1 but two ACTIVE rows committed.
+======================================================================
+PART 2 — CONSTRAINT FIX (counter row + CHECK(active_count <= capacity))
+======================================================================
+  offering_id=522  capacity=1  student_A=1030  student_B=1031
+  T1 outcome: ('FAILED', '23514', 'new row for relation "race_demo_capacity" violates check constraint "race_demo_capacity_check"\nDETAIL:  Failing row cont')
+  T2 outcome: ('COMMITTED', None)
+  Active rows after = 1  (capacity = 1)
+  >>> FIX CONFIRMED: only one ACTIVE row landed.
+======================================================================
+PART 3 — ADVISORY LOCK FIX (pg_advisory_xact_lock(offering_id))
+======================================================================
+  offering_id=523  capacity=1  student_A=1030  student_B=1031
+  T1 outcome: ('FAILED', '23514', 'offering 523 is full (capacity 1, active 1)\nCONTEXT:  PL/pgSQL function enforce_capacity() line 17 at RAISE')
+  T2 outcome: ('COMMITTED', None)
+  Active rows after = 1  (capacity = 1)
+  >>> FIX CONFIRMED: only one ACTIVE row landed; the other was blocked.
+======================================================================
+PART 4 — SERIALIZABLE isolation (expects SQLSTATE 40001)
+======================================================================
+  offering_id=524  capacity=1  student_A=1030  student_B=1031
+  T1 outcome: ('COMMITTED', None)
+  T2 outcome: ('ABORTED', '40001', 'could not serialize access due to read/write dependencies among transactions\nDETAIL:  Reason code: Canceled on identific')
+  >>> PASS: at least one transaction aborted with SQLSTATE 40001.
+======================================================================
+PART 5 — READ COMMITTED vs REPEATABLE READ (snapshot behaviour)
+======================================================================
+  5a. READ COMMITTED — a second read inside the same transaction
+      sees another transaction's committed write.
+      READ COMMITTED reads: [('first_read', 0), ('second_read', 1)]
+      >>> PASS: READ COMMITTED saw the writer's committed value.
+  5b. REPEATABLE READ — a second read inside the same transaction
+      uses the original snapshot (writer's update is invisible).
+      REPEATABLE READ reads: [('first_read', 0), ('second_read', 0)]
+      >>> PASS: REPEATABLE READ kept the snapshot value.
+======================================================================
+PART 6 — DEADLOCK (40P01) and the fixed-order version
+======================================================================
+  6a. Buggy version — opposite update orders.
+      T1 outcome: ('COMMITTED', None)
+      T2 outcome: ('ABORTED', '40P01', 'deadlock detected\nDETAIL:  Process 18716 waits for ShareLock on transaction 857; blocked by process 18715.\nProcess 18715')
+      >>> PASS: PostgreSQL detected the deadlock (SQLSTATE 40P01).
+  6b. Fixed version — same update order on both threads.
+      T1 outcome: ('COMMITTED', None)
+      T2 outcome: ('COMMITTED', None)
+      >>> PASS: both transactions committed without a deadlock.
+======================================================================
+CLEANUP — demo rows deleted; database left as it was.
+======================================================================
