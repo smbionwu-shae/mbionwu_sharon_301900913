@@ -1,0 +1,226 @@
+--- 01_schema.sql
+ALTER DATABASE
+SET
+psql:01_schema.sql:21: NOTICE:  table "result" does not exist, skipping
+DROP TABLE
+psql:01_schema.sql:22: NOTICE:  table "fee_payment" does not exist, skipping
+DROP TABLE
+psql:01_schema.sql:23: NOTICE:  table "exam" does not exist, skipping
+DROP TABLE
+psql:01_schema.sql:24: NOTICE:  table "registration" does not exist, skipping
+DROP TABLE
+psql:01_schema.sql:25: NOTICE:  table "course_offering" does not exist, skipping
+DROP TABLE
+psql:01_schema.sql:26: NOTICE:  table "course" does not exist, skipping
+DROP TABLE
+psql:01_schema.sql:27: NOTICE:  table "student" does not exist, skipping
+DROP TABLE
+psql:01_schema.sql:28: NOTICE:  table "lecturer" does not exist, skipping
+DROP TABLE
+psql:01_schema.sql:29: NOTICE:  table "department" does not exist, skipping
+DROP TABLE
+psql:01_schema.sql:30: NOTICE:  table "faculty" does not exist, skipping
+DROP TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE FUNCTION
+psql:01_schema.sql:226: NOTICE:  trigger "trg_enforce_capacity" for relation "registration" does not exist, skipping
+DROP TRIGGER
+CREATE TRIGGER
+CREATE FUNCTION
+psql:01_schema.sql:260: NOTICE:  trigger "trg_result_registered" for relation "result" does not exist, skipping
+DROP TRIGGER
+CREATE TRIGGER
+CREATE FUNCTION
+psql:01_schema.sql:294: NOTICE:  trigger "trg_no_lecturer_clash" for relation "course_offering" does not exist, skipping
+DROP TRIGGER
+CREATE TRIGGER
+CREATE FUNCTION
+psql:01_schema.sql:316: NOTICE:  trigger "trg_no_past_exam_date" for relation "exam" does not exist, skipping
+DROP TRIGGER
+CREATE TRIGGER
+         message         
+-------------------------
+ 01_schema.sql loaded OK
+(1 row)
+
+--- 02_indexes.sql
+SET
+psql:02_indexes.sql:19: NOTICE:  relation "uq_one_active_reg_per_student_offering" already exists, skipping
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+         message          
+--------------------------
+ 02_indexes.sql loaded OK
+(1 row)
+
+--- 03_seed_data.sql
+SET
+INSERT 0 4
+INSERT 0 8
+INSERT 0 12
+INSERT 0 20
+INSERT 0 12
+INSERT 0 8
+INSERT 0 24
+INSERT 0 15
+DO
+INSERT 0 20
+          message           
+----------------------------
+ 03_seed_data.sql loaded OK
+(1 row)
+
+--- 04_bulk_data.sql
+SET
+INSERT 0 1000
+INSERT 0 96
+INSERT 0 500
+INSERT 0 1500
+INSERT 0 59150
+INSERT 0 25929
+INSERT 0 1020
+          message           
+----------------------------
+ 04_bulk_data.sql loaded OK
+(1 row)
+
+  table_name   | rows  
+---------------+-------
+ courses       |   108
+ departments   |     8
+ exams         |  1524
+ faculties     |     4
+ fee_payments  |  1040
+ lecturers     |    12
+ offerings     |   508
+ registrations | 59165
+ results       | 25933
+ students      |  1020
+(10 rows)
+
+--- 05_constraint_tests.sql
+SET
+Running 05_constraint_tests.sql — 10 expected failures + 1 control
+BEGIN
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:58: NOTICE:  TEST 1 PASS (SQLSTATE 23503)
+DO
+ROLLBACK
+BEGIN
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:93: NOTICE:  TEST 2 PASS (SQLSTATE 23503)
+DO
+ROLLBACK
+BEGIN
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:142: NOTICE:  TEST 3 PASS (SQLSTATE 23505)
+DO
+ROLLBACK
+BEGIN
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:172: NOTICE:  TEST 4 PASS (SQLSTATE 23514)
+DO
+ROLLBACK
+BEGIN
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:204: NOTICE:  TEST 5 PASS (SQLSTATE 23514)
+DO
+ROLLBACK
+BEGIN
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:267: NOTICE:  TEST 6 PASS (SQLSTATE 23514)
+DO
+ROLLBACK
+BEGIN
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:326: NOTICE:  TEST 7 PASS (SQLSTATE 23503)
+DO
+ROLLBACK
+BEGIN
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:381: NOTICE:  TEST 8 PASS (SQLSTATE 23514)
+DO
+ROLLBACK
+BEGIN
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:437: NOTICE:  TEST 9 PASS (SQLSTATE 23505)
+DO
+ROLLBACK
+BEGIN
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:483: NOTICE:  TEST 10 PASS (SQLSTATE 23514)
+DO
+ROLLBACK
+BEGIN
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+psql:05_constraint_tests.sql:535: NOTICE:  TEST 11 (control) PASS — registration_id = 59171
+DO
+ROLLBACK
+05_constraint_tests.sql finished
