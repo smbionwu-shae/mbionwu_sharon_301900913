@@ -1,0 +1,616 @@
+--- 01_queries.sql
+SET
+=== Q1 — One student: full transcript (student_id = 1) ===
+    matric_no     |   full_name   | course_code |           course_title           | exam_type | score |          graded_at           
+------------------+---------------+-------------+----------------------------------+-----------+-------+------------------------------
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU004       | Bulk Course 4 — Department 5     | FINAL     | 49.05 | 2027-01-07 04:28:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU004       | Bulk Course 4 — Department 5     | FINAL     | 85.86 | 2027-01-05 11:09:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU044       | Bulk Course 44 — Department 5    | FINAL     | 64.07 | 2026-12-20 11:19:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU044       | Bulk Course 44 — Department 5    | FINAL     | 74.23 | 2026-12-13 04:38:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU052       | Bulk Course 52 — Department 5    | FINAL     | 52.20 | 2026-11-18 03:01:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU048       | Bulk Course 48 — Department 1    | FINAL     | 43.39 | 2026-11-10 11:23:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU008       | Bulk Course 8 — Department 1     | FINAL     | 81.20 | 2026-11-10 08:06:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | CSC101      | Introduction to Computer Science | CA        | 85.01 | 2026-11-09 00:56:40.88607+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU008       | Bulk Course 8 — Department 1     | FINAL     | 42.23 | 2026-11-03 03:37:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU055       | Bulk Course 55 — Department 8    | FINAL     | 75.89 | 2026-10-18 00:48:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU015       | Bulk Course 15 — Department 8    | FINAL     | 90.98 | 2026-09-25 04:12:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU011       | Bulk Course 11 — Department 4    | FINAL     | 55.69 | 2026-09-20 00:34:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU055       | Bulk Course 55 — Department 8    | FINAL     | 77.75 | 2026-09-08 07:29:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU019       | Bulk Course 19 — Department 4    | FINAL     | 93.20 | 2026-08-26 04:16:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU015       | Bulk Course 15 — Department 8    | FINAL     | 89.46 | 2026-08-17 07:19:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU019       | Bulk Course 19 — Department 4    | FINAL     | 61.18 | 2026-08-03 11:47:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU026       | Bulk Course 26 — Department 3    | FINAL     | 83.19 | 2026-06-27 00:22:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU022       | Bulk Course 22 — Department 7    | FINAL     | 89.81 | 2026-06-14 08:44:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU026       | Bulk Course 26 — Department 3    | FINAL     | 77.31 | 2026-06-13 07:03:00+01
+ SSU/CSC/2022/001 | Tunde Adeyemi | BU033       | Bulk Course 33 — Department 2    | FINAL     | 51.79 | 2026-04-26 11:35:00+01
+(20 rows)
+
+=== Q2 — One department: all students with status (department_id = 1, Computer Science) ===
+    matric_no     |    full_name    | gender |                 email                  | enrolled_on | status | active_regs 
+------------------+-----------------+--------+----------------------------------------+-------------+--------+-------------
+ SSU/CSC/2022/001 | Tunde Adeyemi   | M      | tunde.adeyemi@student.ststephen.edu.ng | 2022-09-01  | ACTIVE |          49
+ SSU/CSC/2022/002 | Chinedu Obi     | M      | chinedu.obi@student.ststephen.edu.ng   | 2022-09-01  | ACTIVE |          51
+ SSU/CSC/2022/003 | Ngozi Okafor    | F      | ngozi.okafor@student.ststephen.edu.ng  | 2022-09-01  | ACTIVE |          49
+ SSU/CSC/2022/004 | Adaeze Eze      | F      | adaeze.eze@student.ststephen.edu.ng    | 2022-09-01  | ACTIVE |          50
+ SSU/CSC/2023/005 | Musa Ibrahim    | M      | musa.ibrahim@student.ststephen.edu.ng  | 2023-09-01  | ACTIVE |          51
+ SSU/CSC/2024/008 | Adamu Idris     | M      | bulk8@student.ststephen.edu.ng         | 2024-09-01  | ACTIVE |          50
+ SSU/CSC/2024/016 | Ifeanyi Adewale | M      | bulk16@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          53
+ SSU/CSC/2024/024 | Henry Bello     | M      | bulk24@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          51
+ SSU/CSC/2024/032 | Musa Adebayo    | M      | bulk32@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          54
+ SSU/CSC/2024/040 | Daniel Ogunleye | M      | bulk40@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          49
+ SSU/CSC/2024/048 | Seyi Oyetunji   | M      | bulk48@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          54
+ SSU/CSC/2024/056 | Nasir Nwosu     | M      | bulk56@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          53
+ SSU/CSC/2024/064 | Bola Olatunji   | M      | bulk64@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          52
+ SSU/CSC/2024/072 | Chuka Mohammed  | M      | bulk72@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          51
+ SSU/CSC/2024/080 | Jide Oyinlola   | M      | bulk80@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          52
+ SSU/CSC/2024/088 | Kabir Ibrahim   | M      | bulk88@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          58
+ SSU/CSC/2024/096 | Yakubu Adekunle | M      | bulk96@student.ststephen.edu.ng        | 2024-09-01  | ACTIVE |          52
+ SSU/CSC/2024/100 | Daniel Ogunleye | M      | bulk1000@student.ststephen.edu.ng      | 2024-09-01  | ACTIVE |          50
+ SSU/CSC/2024/104 | Kunle Ezealor   | M      | bulk104@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          52
+ SSU/CSC/2024/112 | Tope Okoro      | M      | bulk112@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          54
+ SSU/CSC/2024/120 | Tunde Eze       | M      | bulk120@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          56
+ SSU/CSC/2024/128 | Adamu Idris     | M      | bulk128@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          54
+ SSU/CSC/2024/136 | Ifeanyi Adewale | M      | bulk136@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          50
+ SSU/CSC/2024/144 | Henry Bello     | M      | bulk144@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          54
+ SSU/CSC/2024/152 | Musa Adebayo    | M      | bulk152@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          57
+ SSU/CSC/2024/160 | Daniel Ogunleye | M      | bulk160@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          54
+ SSU/CSC/2024/168 | Seyi Oyetunji   | M      | bulk168@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          54
+ SSU/CSC/2024/176 | Nasir Nwosu     | M      | bulk176@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          54
+ SSU/CSC/2024/184 | Bola Olatunji   | M      | bulk184@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          57
+ SSU/CSC/2024/192 | Chuka Mohammed  | M      | bulk192@student.ststephen.edu.ng       | 2024-09-01  | ACTIVE |          53
+(30 rows)
+
+=== Q3 — One lecturer: all offerings taught (lecturer_id = 1) ===
+    staff_no     |      lecturer      | course_code |           course_title           | semester | academic_year | capacity | slot_day | start_time | end_time | active_count 
+-----------------+--------------------+-------------+----------------------------------+----------+---------------+----------+----------+------------+----------+--------------
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU001       | Bulk Course 1 — Department 2     | FIRST    | 2025/2026     |       86 |        2 | 12:00:00   | 13:00:00 |           75
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU002       | Bulk Course 2 — Department 3     | FIRST    | 2025/2026     |       95 |        3 | 15:00:00   | 16:00:00 |           83
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU003       | Bulk Course 3 — Department 4     | FIRST    | 2025/2026     |      104 |        5 | 12:00:00   | 13:00:00 |           91
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU004       | Bulk Course 4 — Department 5     | FIRST    | 2025/2026     |      113 |        6 | 15:00:00   | 16:00:00 |           99
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | CSC101      | Introduction to Computer Science | FIRST    | 2025/2026     |       60 |        1 | 08:00:00   | 10:00:00 |            4
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | CSC301      | Database Systems                 | FIRST    | 2025/2026     |       40 |        2 | 08:00:00   | 10:00:00 |            3
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU001       | Bulk Course 1 — Department 2     | SECOND   | 2025/2026     |       87 |        2 | 13:00:00   | 14:00:00 |           76
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU002       | Bulk Course 2 — Department 3     | SECOND   | 2025/2026     |       96 |        3 | 16:00:00   | 17:00:00 |           84
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU003       | Bulk Course 3 — Department 4     | SECOND   | 2025/2026     |      105 |        5 | 13:00:00   | 14:00:00 |           92
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU004       | Bulk Course 4 — Department 5     | SECOND   | 2025/2026     |      114 |        6 | 16:00:00   | 17:00:00 |          100
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU001       | Bulk Course 1 — Department 2     | SUMMER   | 2025/2026     |       88 |        2 | 14:00:00   | 15:00:00 |           77
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU002       | Bulk Course 2 — Department 3     | SUMMER   | 2025/2026     |       97 |        3 | 17:00:00   | 18:00:00 |           85
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU003       | Bulk Course 3 — Department 4     | SUMMER   | 2025/2026     |      106 |        5 | 14:00:00   | 15:00:00 |           93
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU004       | Bulk Course 4 — Department 5     | SUMMER   | 2025/2026     |      115 |        6 | 17:00:00   | 18:00:00 |          101
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU001       | Bulk Course 1 — Department 2     | FIRST    | 2024/2025     |       83 |        1 | 15:00:00   | 16:00:00 |           72
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU002       | Bulk Course 2 — Department 3     | FIRST    | 2024/2025     |       92 |        3 | 12:00:00   | 13:00:00 |           80
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU003       | Bulk Course 3 — Department 4     | FIRST    | 2024/2025     |      101 |        4 | 15:00:00   | 16:00:00 |           88
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU004       | Bulk Course 4 — Department 5     | FIRST    | 2024/2025     |      110 |        6 | 12:00:00   | 13:00:00 |           97
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU005       | Bulk Course 5 — Department 6     | FIRST    | 2024/2025     |      119 |        7 | 15:00:00   | 16:00:00 |          105
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU001       | Bulk Course 1 — Department 2     | SECOND   | 2024/2025     |       84 |        1 | 16:00:00   | 17:00:00 |           73
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU002       | Bulk Course 2 — Department 3     | SECOND   | 2024/2025     |       93 |        3 | 13:00:00   | 14:00:00 |           81
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU003       | Bulk Course 3 — Department 4     | SECOND   | 2024/2025     |      102 |        4 | 16:00:00   | 17:00:00 |           89
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU004       | Bulk Course 4 — Department 5     | SECOND   | 2024/2025     |      111 |        6 | 13:00:00   | 14:00:00 |           97
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU005       | Bulk Course 5 — Department 6     | SECOND   | 2024/2025     |      120 |        7 | 16:00:00   | 17:00:00 |          106
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU001       | Bulk Course 1 — Department 2     | SUMMER   | 2024/2025     |       85 |        1 | 17:00:00   | 18:00:00 |           74
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU002       | Bulk Course 2 — Department 3     | SUMMER   | 2024/2025     |       94 |        3 | 14:00:00   | 15:00:00 |           82
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU003       | Bulk Course 3 — Department 4     | SUMMER   | 2024/2025     |      103 |        4 | 17:00:00   | 18:00:00 |           90
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU004       | Bulk Course 4 — Department 5     | SUMMER   | 2024/2025     |      112 |        6 | 14:00:00   | 15:00:00 |           98
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU005       | Bulk Course 5 — Department 6     | SUMMER   | 2024/2025     |      121 |        7 | 17:00:00   | 18:00:00 |          106
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU001       | Bulk Course 1 — Department 2     | FIRST    | 2023/2024     |       80 |        1 | 12:00:00   | 13:00:00 |           70
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU002       | Bulk Course 2 — Department 3     | FIRST    | 2023/2024     |       89 |        2 | 15:00:00   | 16:00:00 |           78
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU003       | Bulk Course 3 — Department 4     | FIRST    | 2023/2024     |       98 |        4 | 12:00:00   | 13:00:00 |           86
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU004       | Bulk Course 4 — Department 5     | FIRST    | 2023/2024     |      107 |        5 | 15:00:00   | 16:00:00 |           94
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU005       | Bulk Course 5 — Department 6     | FIRST    | 2023/2024     |      116 |        7 | 12:00:00   | 13:00:00 |          102
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU001       | Bulk Course 1 — Department 2     | SECOND   | 2023/2024     |       81 |        1 | 13:00:00   | 14:00:00 |           70
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU002       | Bulk Course 2 — Department 3     | SECOND   | 2023/2024     |       90 |        2 | 16:00:00   | 17:00:00 |           79
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU003       | Bulk Course 3 — Department 4     | SECOND   | 2023/2024     |       99 |        4 | 13:00:00   | 14:00:00 |           87
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU004       | Bulk Course 4 — Department 5     | SECOND   | 2023/2024     |      108 |        5 | 16:00:00   | 17:00:00 |           95
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU005       | Bulk Course 5 — Department 6     | SECOND   | 2023/2024     |      117 |        7 | 13:00:00   | 14:00:00 |          103
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU001       | Bulk Course 1 — Department 2     | SUMMER   | 2023/2024     |       82 |        1 | 14:00:00   | 15:00:00 |           71
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU002       | Bulk Course 2 — Department 3     | SUMMER   | 2023/2024     |       91 |        2 | 17:00:00   | 18:00:00 |           79
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU003       | Bulk Course 3 — Department 4     | SUMMER   | 2023/2024     |      100 |        4 | 14:00:00   | 15:00:00 |           88
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU004       | Bulk Course 4 — Department 5     | SUMMER   | 2023/2024     |      109 |        5 | 17:00:00   | 18:00:00 |           96
+ SSU/SCI/CSC/001 | Dr. Chinedu Okafor | BU005       | Bulk Course 5 — Department 6     | SUMMER   | 2023/2024     |      118 |        7 | 14:00:00   | 15:00:00 |          104
+(44 rows)
+
+=== Q4 — Registrations in the last 30 days ===
+    matric_no     |    full_name     | course_code |         course_title          |     registered_at      
+------------------+------------------+-------------+-------------------------------+------------------------
+ SSU/ENG/2024/159 | Fatima Chukwu    | BU041       | Bulk Course 41 — Department 2 | 2026-12-02 11:33:00+01
+ SSU/CIV/2024/050 | Jide Oyinlola    | BU001       | Bulk Course 1 — Department 2  | 2026-12-02 09:19:00+01
+ SSU/PHY/2024/145 | Happiness Musa   | BU041       | Bulk Course 41 — Department 2 | 2026-12-02 09:19:00+01
+ SSU/ACC/2024/036 | Yakubu Adekunle  | BU001       | Bulk Course 1 — Department 2  | 2026-12-02 07:05:00+01
+ SSU/ELE/2024/131 | Chidinma Olawale | BU041       | Bulk Course 41 — Department 2 | 2026-12-02 07:05:00+01
+ SSU/MCO/2024/022 | Tope Okoro       | BU001       | Bulk Course 1 — Department 2  | 2026-12-02 05:41:00+01
+ SSU/BUS/2024/117 | Mercy Adeyemi    | BU041       | Bulk Course 41 — Department 2 | 2026-12-02 05:41:00+01
+ SSU/CSC/2024/008 | Adamu Idris      | BU001       | Bulk Course 1 — Department 2  | 2026-12-02 03:27:00+01
+ SSU/ENG/2024/103 | Nneka Okeke      | BU041       | Bulk Course 41 — Department 2 | 2026-12-02 03:27:00+01
+ SSU/ELE/2024/187 | Zainab Onuoha    | BU041       | Bulk Course 41 — Department 2 | 2026-12-02 03:11:00+01
+ SSU/BUS/2024/173 | Obiageli Okafor  | BU041       | Bulk Course 41 — Department 2 | 2026-12-02 01:47:00+01
+ SSU/ACC/2023/014 | Chuka Eze        | BU001       | Bulk Course 1 — Department 2  | 2026-12-02 01:13:00+01
+ SSU/PHY/2024/089 | Halima Obi       | BU041       | Bulk Course 41 — Department 2 | 2026-12-02 01:13:00+01
+ SSU/MCO/2024/190 | Daniel Ogunleye  | BU041       | Bulk Course 41 — Department 2 | 2026-12-01 11:33:00+01
+ SSU/MCO/2024/158 | Adamu Idris      | BU041       | Bulk Course 41 — Department 2 | 2026-12-01 10:32:00+01
+ SSU/PHY/2024/081 | Asmau Oyeyemi    | BU001       | Bulk Course 1 — Department 2  | 2026-12-01 09:19:00+01
+ SSU/CSC/2024/176 | Nasir Nwosu      | BU041       | Bulk Course 41 — Department 2 | 2026-12-01 09:19:00+01
+ SSU/PHY/2024/049 | Bukola Oyeleke   | BU001       | Bulk Course 1 — Department 2  | 2026-12-01 08:18:00+01
+ SSU/CSC/2024/144 | Henry Bello      | BU041       | Bulk Course 41 — Department 2 | 2026-12-01 08:18:00+01
+ SSU/ELE/2024/067 | Zainab Onuoha    | BU001       | Bulk Course 1 — Department 2  | 2026-12-01 07:05:00+01
+ SSU/CIV/2024/162 | Chuka Mohammed   | BU041       | Bulk Course 41 — Department 2 | 2026-12-01 07:05:00+01
+ SSU/ELE/2024/035 | Bisi Okonkwo     | BU001       | Bulk Course 1 — Department 2  | 2026-12-01 06:04:00+01
+ SSU/CIV/2024/130 | Daniel Ogunleye  | BU041       | Bulk Course 41 — Department 2 | 2026-12-01 06:04:00+01
+ SSU/BUS/2024/053 | Obiageli Okafor  | BU001       | Bulk Course 1 — Department 2  | 2026-12-01 05:41:00+01
+ SSU/ACC/2024/148 | Kabir Ibrahim    | BU041       | Bulk Course 41 — Department 2 | 2026-12-01 05:41:00+01
+ SSU/CSC/2024/200 | Jide Oyinlola    | BU041       | Bulk Course 41 — Department 2 | 2026-12-01 04:24:00+01
+ SSU/ENG/2024/039 | Fatima Chukwu    | BU001       | Bulk Course 1 — Department 2  | 2026-12-01 03:27:00+01
+ SSU/MCO/2024/134 | Kunle Ezealor    | BU041       | Bulk Course 41 — Department 2 | 2026-12-01 03:27:00+01
+ SSU/CIV/2024/218 | Adamu Idris      | BU041       | Bulk Course 41 — Department 2 | 2026-12-01 03:11:00+01
+ SSU/ENG/2024/007 | Zainab Onuoha    | BU001       | Bulk Course 1 — Department 2  | 2026-12-01 02:26:00+01
+(30 rows)
+
+=== Q5 — Aggregate: average FINAL exam score per course ===
+ course_code |          course_title          | attempts | avg_score | stddev_score 
+-------------+--------------------------------+----------+-----------+--------------
+ PHY101      | General Mechanics              |        1 |     86.07 |         0.00
+ CIV101      | Engineering Mechanics          |        1 |     84.33 |         0.00
+ CSC201      | Data Structures and Algorithms |        1 |     83.40 |         0.00
+ BU027       | Bulk Course 27 — Department 4  |      528 |     71.76 |        17.31
+ BU002       | Bulk Course 2 — Department 3   |      362 |     71.57 |        17.74
+ BU015       | Bulk Course 15 — Department 8  |      516 |     71.17 |        17.64
+ BU012       | Bulk Course 12 — Department 5  |      410 |     71.17 |        17.39
+ BU001       | Bulk Course 1 — Department 2   |      326 |     71.01 |        17.21
+ BU054       | Bulk Course 54 — Department 7  |      424 |     70.99 |        17.66
+ BU035       | Bulk Course 35 — Department 4  |      598 |     70.98 |        16.82
+ BU051       | Bulk Course 51 — Department 4  |      532 |     70.97 |        17.21
+ BU029       | Bulk Course 29 — Department 6  |      374 |     70.97 |        16.20
+ BU003       | Bulk Course 3 — Department 4   |      406 |     70.91 |        16.92
+ BU042       | Bulk Course 42 — Department 3  |      518 |     70.80 |        18.09
+ BU056       | Bulk Course 56 — Department 1  |      216 |     70.78 |        17.31
+ BU010       | Bulk Course 10 — Department 3  |      330 |     70.73 |        17.47
+ BU028       | Bulk Course 28 — Department 5  |      345 |     70.70 |        17.01
+ BU036       | Bulk Course 36 — Department 5  |      493 |     70.66 |        17.95
+ BU013       | Bulk Course 13 — Department 6  |      438 |     70.65 |        17.42
+ BU055       | Bulk Course 55 — Department 8  |      357 |     70.63 |        17.55
+ BU032       | Bulk Course 32 — Department 1  |      490 |     70.57 |        16.82
+ BU009       | Bulk Course 9 — Department 2   |      578 |     70.48 |        17.51
+ BU007       | Bulk Course 7 — Department 8   |      549 |     70.45 |        17.30
+ BU044       | Bulk Course 44 — Department 5  |      602 |     70.38 |        17.55
+ BU033       | Bulk Course 33 — Department 2  |      514 |     70.26 |        17.50
+ BU053       | Bulk Course 53 — Department 6  |      594 |     70.19 |        17.45
+ BU047       | Bulk Course 47 — Department 8  |      390 |     70.16 |        17.58
+ BU034       | Bulk Course 34 — Department 3  |      550 |     70.13 |        17.63
+ BU014       | Bulk Course 14 — Department 7  |      474 |     70.12 |        17.24
+ BU045       | Bulk Course 45 — Department 6  |      452 |     70.11 |        17.50
+(30 rows)
+
+=== Q6 — Aggregate: pass rate per department (FINAL exam, pass mark 40) ===
+ department_code |       department_name        | attempts | passed | pass_rate_pct 
+-----------------+------------------------------+----------+--------+---------------
+ ACC             | Accounting                   |     3239 |   3239 |        100.00
+ BUS             | Business Administration      |     3076 |   3076 |        100.00
+ CIV             | Civil Engineering            |     3381 |   3381 |        100.00
+ CSC             | Computer Science             |     3255 |   3255 |        100.00
+ ELE             | Electrical Engineering       |     3344 |   3344 |        100.00
+ ENG             | English and Literary Studies |     3177 |   3177 |        100.00
+ MCO             | Mass Communication           |     2976 |   2976 |        100.00
+ PHY             | Physics                      |     3481 |   3481 |        100.00
+(8 rows)
+
+=== Q7 — Aggregate: fees owed per student (derived) ===
+    matric_no     |    full_name     |       department_name        | tuition_naira | paid_naira | balance_naira 
+------------------+------------------+------------------------------+---------------+------------+---------------
+ SSU/MCO/2024/150 | Tunde Eze        | Mass Communication           |     895000.00 |  700000.00 |     195000.00
+ SSU/ENG/2024/119 | Halima Obi       | English and Literary Studies |     895000.00 |  700000.00 |     195000.00
+ SSU/ENG/2024/151 | Folake Etsu      | English and Literary Studies |     870000.00 |  700000.00 |     170000.00
+ SSU/ENG/2024/183 | Chioma Suleiman  | English and Literary Studies |     865000.00 |  700000.00 |     165000.00
+ SSU/ENG/2024/215 | Bisi Okonkwo     | English and Literary Studies |     860000.00 |  700000.00 |     160000.00
+ SSU/ENG/2024/175 | Happiness Musa   | English and Literary Studies |     850000.00 |  700000.00 |     150000.00
+ SSU/MCO/2024/182 | Musa Adebayo     | Mass Communication           |     850000.00 |  700000.00 |     150000.00
+ SSU/BUS/2024/181 | Folake Etsu      | Business Administration      |     895000.00 |  750000.00 |     145000.00
+ SSU/MCO/2024/214 | Bola Olatunji    | Mass Communication           |     840000.00 |  700000.00 |     140000.00
+ SSU/ENG/2024/143 | Obiageli Okafor  | English and Literary Studies |     835000.00 |  700000.00 |     135000.00
+ SSU/ENG/2024/159 | Fatima Chukwu    | English and Literary Studies |     835000.00 |  700000.00 |     135000.00
+ SSU/MCO/2024/094 | Bola Olatunji    | Mass Communication           |     835000.00 |  700000.00 |     135000.00
+ SSU/ENG/2024/191 | Chidinma Olawale | English and Literary Studies |     835000.00 |  700000.00 |     135000.00
+ SSU/MCO/2024/206 | Nasir Nwosu      | Mass Communication           |     835000.00 |  700000.00 |     135000.00
+ SSU/MCO/2024/110 | Jide Oyinlola    | Mass Communication           |     835000.00 |  700000.00 |     135000.00
+ SSU/ENG/2024/047 | Yetunde Ojo      | English and Literary Studies |     835000.00 |  700000.00 |     135000.00
+ SSU/MCO/2024/078 | Seyi Oyetunji    | Mass Communication           |     830000.00 |  700000.00 |     130000.00
+ SSU/MCO/2024/174 | Henry Bello      | Mass Communication           |     830000.00 |  700000.00 |     130000.00
+ SSU/ENG/2024/079 | Bukola Oyeleke   | English and Literary Studies |     825000.00 |  700000.00 |     125000.00
+ SSU/ENG/2024/367 | Zainab Onuoha    | English and Literary Studies |     825000.00 |  700000.00 |     125000.00
+(20 rows)
+
+=== Q8 — Aggregate: top-10 lecturers by active registrations taught ===
+    staff_no     |     lecturer      |       department_name        | active_registrations | offerings_taught 
+-----------------+-------------------+------------------------------+----------------------+------------------
+ SSU/SCI/CSC/002 | Dr. Ngozi Eze     | Computer Science             |                 4963 |               43
+ SSU/SCI/PHY/004 | Dr. Adamu Ibrahim | Physics                      |                 4825 |               42
+ SSU/ENG/ELE/006 | Dr. Aisha Bello   | Electrical Engineering       |                 4694 |               43
+ SSU/MGT/ACC/008 | Dr. Chioma Obi    | Accounting                   |                 4559 |               42
+ SSU/ART/MCO/011 | Dr. Adaeze Nwosu  | Mass Communication           |                 4436 |               42
+ SSU/MGT/BUS/010 | Dr. Yakubu Etsu   | Business Administration      |                 4427 |               42
+ SSU/MGT/ACC/009 | Dr. Bola Adebayo  | Accounting                   |                 4289 |               42
+ SSU/ENG/ELE/007 | Engr. Emeka Nwosu | Electrical Engineering       |                 4141 |               42
+ SSU/ENG/CIV/005 | Dr. Tunde Bello   | Civil Engineering            |                 3997 |               43
+ SSU/ART/ENG/012 | Dr. Sadiq Bello   | English and Literary Studies |                 3938 |               38
+(10 rows)
+
+--- 02_explain_analyze.sql
+Timing is on.
+SET
+Time: 0.169 ms
+==============================================================
+PHASE 1 — DROPPING P2 selective indexes
+==============================================================
+DROP INDEX
+Time: 2.398 ms
+DROP INDEX
+Time: 1.514 ms
+DROP INDEX
+Time: 1.363 ms
+DROP INDEX
+Time: 2.288 ms
+==============================================================
+PHASE 2 — EXPLAIN (ANALYZE, BUFFERS) WITHOUT indexes
+==============================================================
+--- Q1 (one student transcript) without idx_result_student_graded ---
+                                                                               QUERY PLAN                                                                               
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=260.53..260.58 rows=20 width=96) (actual time=0.616..0.620 rows=20 loops=1)
+   Buffers: shared hit=47
+   ->  Sort  (cost=260.53..260.83 rows=121 width=96) (actual time=0.614..0.617 rows=20 loops=1)
+         Sort Key: r.graded_at DESC
+         Sort Method: quicksort  Memory: 26kB
+         Buffers: shared hit=47
+         ->  Hash Join  (cost=224.54..257.31 rows=121 width=96) (actual time=0.355..0.572 rows=26 loops=1)
+               Hash Cond: (o.course_id = c.course_id)
+               Buffers: shared hit=44
+               ->  Hash Join  (cost=209.14..241.58 rows=121 width=62) (actual time=0.303..0.515 rows=26 loops=1)
+                     Hash Cond: (e.offering_id = o.offering_id)
+                     Buffers: shared hit=42
+                     ->  Nested Loop  (cost=184.97..217.08 rows=121 width=62) (actual time=0.183..0.391 rows=26 loops=1)
+                           Buffers: shared hit=36
+                           ->  Index Only Scan using student_pkey on student s  (cost=0.27..8.29 rows=1 width=4) (actual time=0.035..0.035 rows=1 loops=1)
+                                 Index Cond: (student_id = 1)
+                                 Heap Fetches: 1
+                                 Buffers: shared hit=3
+                           ->  Hash Join  (cost=184.70..207.59 rows=121 width=66) (actual time=0.146..0.351 rows=26 loops=1)
+                                 Hash Cond: (e.exam_id = r.exam_id)
+                                 Buffers: shared hit=33
+                                 ->  Seq Scan on exam e  (cost=0.00..20.20 rows=1020 width=46) (actual time=0.006..0.112 rows=1524 loops=1)
+                                       Buffers: shared hit=10
+                                 ->  Hash  (cost=183.19..183.19 rows=121 width=28) (actual time=0.121..0.122 rows=26 loops=1)
+                                       Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                                       Buffers: shared hit=23
+                                       ->  Bitmap Heap Scan on result r  (cost=5.23..183.19 rows=121 width=28) (actual time=0.030..0.116 rows=26 loops=1)
+                                             Recheck Cond: (student_id = 1)
+                                             Heap Blocks: exact=21
+                                             Buffers: shared hit=23
+                                             ->  Bitmap Index Scan on idx_result_student  (cost=0.00..5.19 rows=121 width=0) (actual time=0.024..0.024 rows=26 loops=1)
+                                                   Index Cond: (student_id = 1)
+                                                   Buffers: shared hit=2
+                     ->  Hash  (cost=16.30..16.30 rows=630 width=8) (actual time=0.107..0.107 rows=508 loops=1)
+                           Buckets: 1024  Batches: 1  Memory Usage: 28kB
+                           Buffers: shared hit=6
+                           ->  Seq Scan on course_offering o  (cost=0.00..16.30 rows=630 width=8) (actual time=0.004..0.050 rows=508 loops=1)
+                                 Buffers: shared hit=6
+               ->  Hash  (cost=12.40..12.40 rows=240 width=42) (actual time=0.038..0.038 rows=108 loops=1)
+                     Buckets: 1024  Batches: 1  Memory Usage: 13kB
+                     Buffers: shared hit=2
+                     ->  Seq Scan on course c  (cost=0.00..12.40 rows=240 width=42) (actual time=0.005..0.018 rows=108 loops=1)
+                           Buffers: shared hit=2
+ Planning:
+   Buffers: shared hit=489
+ Planning Time: 1.212 ms
+ Execution Time: 0.700 ms
+(47 rows)
+
+Time: 2.892 ms
+--- Q2 (one department students) without idx_student_department ---
+                                                     QUERY PLAN                                                     
+--------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=17.64..17.64 rows=1 width=278) (actual time=0.282..0.286 rows=30 loops=1)
+   Buffers: shared hit=18
+   ->  Sort  (cost=17.64..17.64 rows=1 width=278) (actual time=0.281..0.283 rows=30 loops=1)
+         Sort Key: matric_no
+         Sort Method: top-N heapsort  Memory: 27kB
+         Buffers: shared hit=18
+         ->  Seq Scan on student s  (cost=0.00..17.62 rows=1 width=278) (actual time=0.006..0.221 rows=130 loops=1)
+               Filter: (department_id = 1)
+               Rows Removed by Filter: 890
+               Buffers: shared hit=15
+ Planning:
+   Buffers: shared hit=10
+ Planning Time: 0.081 ms
+ Execution Time: 0.297 ms
+(14 rows)
+
+Time: 0.786 ms
+--- Q3 (one lecturer offerings) without idx_offering_lecturer ---
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=39.46..39.47 rows=3 width=362) (actual time=0.146..0.149 rows=44 loops=1)
+   Sort Key: o.academic_year DESC, o.semester, c.course_code
+   Sort Method: quicksort  Memory: 28kB
+   Buffers: shared hit=10
+   ->  Nested Loop  (cost=18.06..39.44 rows=3 width=362) (actual time=0.087..0.110 rows=44 loops=1)
+         Buffers: shared hit=10
+         ->  Index Only Scan using lecturer_pkey on lecturer l  (cost=0.14..8.16 rows=1 width=4) (actual time=0.027..0.027 rows=1 loops=1)
+               Index Cond: (lecturer_id = 1)
+               Heap Fetches: 1
+               Buffers: shared hit=2
+         ->  Hash Join  (cost=17.91..31.24 rows=3 width=366) (actual time=0.059..0.077 rows=44 loops=1)
+               Hash Cond: (c.course_id = o.course_id)
+               Buffers: shared hit=8
+               ->  Seq Scan on course c  (cost=0.00..12.40 rows=240 width=300) (actual time=0.004..0.010 rows=108 loops=1)
+                     Buffers: shared hit=2
+               ->  Hash  (cost=17.88..17.88 rows=3 width=74) (actual time=0.049..0.050 rows=44 loops=1)
+                     Buckets: 1024  Batches: 1  Memory Usage: 11kB
+                     Buffers: shared hit=6
+                     ->  Seq Scan on course_offering o  (cost=0.00..17.88 rows=3 width=74) (actual time=0.005..0.037 rows=44 loops=1)
+                           Filter: (lecturer_id = 1)
+                           Rows Removed by Filter: 464
+                           Buffers: shared hit=6
+ Planning:
+   Buffers: shared hit=76
+ Planning Time: 0.335 ms
+ Execution Time: 0.177 ms
+(26 rows)
+
+Time: 0.918 ms
+--- Q4 (last 30 days registrations) without idx_registration_recent ---
+                                                                                    QUERY PLAN                                                                                     
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=427.98..428.05 rows=30 width=104) (actual time=22.687..22.695 rows=30 loops=1)
+   Buffers: shared hit=18329
+   ->  Sort  (cost=427.98..428.14 rows=66 width=104) (actual time=22.685..22.691 rows=30 loops=1)
+         Sort Key: r.registered_at DESC
+         Sort Method: top-N heapsort  Memory: 29kB
+         Buffers: shared hit=18329
+         ->  Nested Loop  (cost=53.34..426.03 rows=66 width=104) (actual time=3.350..21.476 rows=8834 loops=1)
+               Buffers: shared hit=18329
+               ->  Hash Join  (cost=53.20..410.27 rows=66 width=70) (actual time=3.336..15.373 rows=8834 loops=1)
+                     Hash Cond: (r.offering_id = o.offering_id)
+                     Buffers: shared hit=661
+                     ->  Hash Join  (cost=29.02..385.92 rows=66 width=70) (actual time=3.188..14.007 rows=8834 loops=1)
+                           Hash Cond: (r.student_id = s.student_id)
+                           Buffers: shared hit=655
+                           ->  Bitmap Heap Scan on registration r  (cost=9.30..366.03 rows=66 width=16) (actual time=2.808..12.227 rows=8834 loops=1)
+                                 Recheck Cond: ((status)::text = 'ACTIVE'::text)
+                                 Filter: (registered_at >= (now() - '30 days'::interval))
+                                 Rows Removed by Filter: 42987
+                                 Heap Blocks: exact=439
+                                 Buffers: shared hit=640
+                                 ->  Bitmap Index Scan on uq_one_active_reg_per_student_offering  (cost=0.00..9.28 rows=198 width=0) (actual time=2.732..2.733 rows=51825 loops=1)
+                                       Buffers: shared hit=201
+                           ->  Hash  (cost=17.10..17.10 rows=210 width=62) (actual time=0.369..0.369 rows=1020 loops=1)
+                                 Buckets: 1024  Batches: 1  Memory Usage: 64kB
+                                 Buffers: shared hit=15
+                                 ->  Seq Scan on student s  (cost=0.00..17.10 rows=210 width=62) (actual time=0.009..0.158 rows=1020 loops=1)
+                                       Buffers: shared hit=15
+                     ->  Hash  (cost=16.30..16.30 rows=630 width=8) (actual time=0.140..0.140 rows=508 loops=1)
+                           Buckets: 1024  Batches: 1  Memory Usage: 28kB
+                           Buffers: shared hit=6
+                           ->  Seq Scan on course_offering o  (cost=0.00..16.30 rows=630 width=8) (actual time=0.008..0.074 rows=508 loops=1)
+                                 Buffers: shared hit=6
+               ->  Index Scan using course_pkey on course c  (cost=0.14..0.24 rows=1 width=42) (actual time=0.000..0.000 rows=1 loops=8834)
+                     Index Cond: (course_id = o.course_id)
+                     Buffers: shared hit=17668
+ Planning:
+   Buffers: shared hit=74
+ Planning Time: 0.543 ms
+ Execution Time: 22.745 ms
+(39 rows)
+
+Time: 25.431 ms
+==============================================================
+PHASE 3 — RE-CREATING P2 selective indexes
+==============================================================
+CREATE INDEX
+Time: 40.128 ms
+CREATE INDEX
+Time: 48.014 ms
+CREATE INDEX
+Time: 13.874 ms
+CREATE INDEX
+Time: 9.549 ms
+ANALYZE
+Time: 24.926 ms
+ANALYZE
+Time: 34.882 ms
+ANALYZE
+Time: 5.675 ms
+ANALYZE
+Time: 2.387 ms
+==============================================================
+PHASE 4 — EXPLAIN (ANALYZE, BUFFERS) WITH indexes
+==============================================================
+--- Q1 (one student transcript) with idx_result_student_graded ---
+                                                                                  QUERY PLAN                                                                                  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=122.25..122.30 rows=20 width=90) (actual time=0.487..0.493 rows=20 loops=1)
+   Buffers: shared hit=164 read=2
+   ->  Sort  (cost=122.25..122.32 rows=25 width=90) (actual time=0.485..0.489 rows=20 loops=1)
+         Sort Key: r.graded_at DESC
+         Sort Method: quicksort  Memory: 26kB
+         Buffers: shared hit=164 read=2
+         ->  Nested Loop  (cost=76.28..121.67 rows=25 width=90) (actual time=0.122..0.471 rows=26 loops=1)
+               Buffers: shared hit=164 read=2
+               ->  Nested Loop  (cost=76.13..115.25 rows=25 width=56) (actual time=0.117..0.433 rows=26 loops=1)
+                     Buffers: shared hit=112 read=2
+                     ->  Nested Loop  (cost=75.86..107.02 rows=25 width=56) (actual time=0.109..0.371 rows=26 loops=1)
+                           Buffers: shared hit=34 read=2
+                           ->  Index Only Scan using student_pkey on student s  (cost=0.28..8.29 rows=1 width=4) (actual time=0.008..0.009 rows=1 loops=1)
+                                 Index Cond: (student_id = 1)
+                                 Heap Fetches: 1
+                                 Buffers: shared hit=3
+                           ->  Hash Join  (cost=75.58..98.47 rows=25 width=60) (actual time=0.100..0.356 rows=26 loops=1)
+                                 Hash Cond: (e.exam_id = r.exam_id)
+                                 Buffers: shared hit=31 read=2
+                                 ->  Seq Scan on exam e  (cost=0.00..20.20 rows=1020 width=46) (actual time=0.006..0.129 rows=1524 loops=1)
+                                       Buffers: shared hit=10
+                                 ->  Hash  (cost=75.27..75.27 rows=25 width=22) (actual time=0.066..0.067 rows=26 loops=1)
+                                       Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                                       Buffers: shared hit=21 read=2
+                                       ->  Bitmap Heap Scan on result r  (cost=4.48..75.27 rows=25 width=22) (actual time=0.027..0.058 rows=26 loops=1)
+                                             Recheck Cond: (student_id = 1)
+                                             Heap Blocks: exact=21
+                                             Buffers: shared hit=21 read=2
+                                             ->  Bitmap Index Scan on idx_result_student_graded  (cost=0.00..4.47 rows=25 width=0) (actual time=0.018..0.018 rows=26 loops=1)
+                                                   Index Cond: (student_id = 1)
+                                                   Buffers: shared read=2
+                     ->  Index Scan using course_offering_pkey on course_offering o  (cost=0.27..0.33 rows=1 width=8) (actual time=0.002..0.002 rows=1 loops=26)
+                           Index Cond: (offering_id = e.offering_id)
+                           Buffers: shared hit=78
+               ->  Index Scan using course_pkey on course c  (cost=0.14..0.26 rows=1 width=42) (actual time=0.001..0.001 rows=1 loops=26)
+                     Index Cond: (course_id = o.course_id)
+                     Buffers: shared hit=52
+ Planning:
+   Buffers: shared hit=115 read=3
+ Planning Time: 0.940 ms
+ Execution Time: 0.544 ms
+(41 rows)
+
+Time: 2.002 ms
+--- Q2 (one department students) with idx_student_department ---
+                                                                  QUERY PLAN                                                                   
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=25.62..25.70 rows=30 width=37) (actual time=0.174..0.179 rows=30 loops=1)
+   Buffers: shared hit=18 read=1
+   ->  Sort  (cost=25.62..25.95 rows=130 width=37) (actual time=0.173..0.175 rows=30 loops=1)
+         Sort Key: matric_no
+         Sort Method: top-N heapsort  Memory: 27kB
+         Buffers: shared hit=18 read=1
+         ->  Bitmap Heap Scan on student s  (cost=5.16..21.78 rows=130 width=37) (actual time=0.041..0.114 rows=130 loops=1)
+               Recheck Cond: (department_id = 1)
+               Heap Blocks: exact=15
+               Buffers: shared hit=18 read=1
+               ->  Bitmap Index Scan on idx_student_department  (cost=0.00..5.12 rows=130 width=0) (actual time=0.033..0.033 rows=130 loops=1)
+                     Index Cond: (department_id = 1)
+                     Buffers: shared hit=3 read=1
+ Planning:
+   Buffers: shared hit=12
+ Planning Time: 0.102 ms
+ Execution Time: 0.195 ms
+(17 rows)
+
+Time: 0.484 ms
+--- Q3 (one lecturer offerings) with idx_offering_lecturer ---
+                                                                          QUERY PLAN                                                                          
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=34.42..34.53 rows=44 width=314) (actual time=0.150..0.154 rows=44 loops=1)
+   Sort Key: o.academic_year DESC, o.semester, c.course_code
+   Sort Method: quicksort  Memory: 28kB
+   Buffers: shared hit=5 read=1
+   ->  Hash Join  (cost=15.69..33.22 rows=44 width=314) (actual time=0.077..0.105 rows=44 loops=1)
+         Hash Cond: (o.course_id = c.course_id)
+         Buffers: shared hit=5 read=1
+         ->  Nested Loop  (cost=0.29..17.71 rows=44 width=22) (actual time=0.021..0.038 rows=44 loops=1)
+               Buffers: shared hit=3 read=1
+               ->  Index Only Scan using lecturer_pkey on lecturer l  (cost=0.14..8.16 rows=1 width=4) (actual time=0.006..0.006 rows=1 loops=1)
+                     Index Cond: (lecturer_id = 1)
+                     Heap Fetches: 1
+                     Buffers: shared hit=2
+               ->  Index Scan using idx_offering_lecturer on course_offering o  (cost=0.15..9.10 rows=44 width=26) (actual time=0.013..0.021 rows=44 loops=1)
+                     Index Cond: (lecturer_id = 1)
+                     Buffers: shared hit=1 read=1
+         ->  Hash  (cost=12.40..12.40 rows=240 width=300) (actual time=0.044..0.044 rows=108 loops=1)
+               Buckets: 1024  Batches: 1  Memory Usage: 16kB
+               Buffers: shared hit=2
+               ->  Seq Scan on course c  (cost=0.00..12.40 rows=240 width=300) (actual time=0.006..0.021 rows=108 loops=1)
+                     Buffers: shared hit=2
+ Planning:
+   Buffers: shared hit=12
+ Planning Time: 0.215 ms
+ Execution Time: 0.176 ms
+(25 rows)
+
+Time: 0.602 ms
+--- Q4 (last 30 days registrations) with idx_registration_recent ---
+                                                                               QUERY PLAN                                                                               
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=1.02..11.54 rows=30 width=63) (actual time=0.048..0.180 rows=30 loops=1)
+   Buffers: shared hit=134 read=2
+   ->  Nested Loop  (cost=1.02..3107.59 rows=8856 width=63) (actual time=0.048..0.176 rows=30 loops=1)
+         Buffers: shared hit=134 read=2
+         ->  Nested Loop  (cost=0.86..2870.07 rows=8856 width=29) (actual time=0.043..0.156 rows=30 loops=1)
+               Buffers: shared hit=130 read=2
+               ->  Nested Loop  (cost=0.58..2500.24 rows=8856 width=29) (actual time=0.038..0.129 rows=30 loops=1)
+                     Buffers: shared hit=118 read=2
+                     ->  Index Scan using idx_registration_recent on registration r  (cost=0.29..1971.18 rows=8856 width=16) (actual time=0.028..0.046 rows=30 loops=1)
+                           Index Cond: (registered_at >= (now() - '30 days'::interval))
+                           Buffers: shared hit=28 read=2
+                     ->  Memoize  (cost=0.29..0.31 rows=1 width=21) (actual time=0.002..0.002 rows=1 loops=30)
+                           Cache Key: r.student_id
+                           Cache Mode: logical
+                           Hits: 0  Misses: 30  Evictions: 0  Overflows: 0  Memory Usage: 4kB
+                           Buffers: shared hit=90
+                           ->  Index Scan using student_pkey on student s  (cost=0.28..0.30 rows=1 width=21) (actual time=0.002..0.002 rows=1 loops=30)
+                                 Index Cond: (student_id = r.student_id)
+                                 Buffers: shared hit=90
+               ->  Memoize  (cost=0.28..0.30 rows=1 width=8) (actual time=0.001..0.001 rows=1 loops=30)
+                     Cache Key: r.offering_id
+                     Cache Mode: logical
+                     Hits: 26  Misses: 4  Evictions: 0  Overflows: 0  Memory Usage: 1kB
+                     Buffers: shared hit=12
+                     ->  Index Scan using course_offering_pkey on course_offering o  (cost=0.27..0.29 rows=1 width=8) (actual time=0.002..0.002 rows=1 loops=4)
+                           Index Cond: (offering_id = r.offering_id)
+                           Buffers: shared hit=12
+         ->  Memoize  (cost=0.15..0.27 rows=1 width=42) (actual time=0.000..0.000 rows=1 loops=30)
+               Cache Key: o.course_id
+               Cache Mode: logical
+               Hits: 28  Misses: 2  Evictions: 0  Overflows: 0  Memory Usage: 1kB
+               Buffers: shared hit=4
+               ->  Index Scan using course_pkey on course c  (cost=0.14..0.26 rows=1 width=42) (actual time=0.002..0.002 rows=1 loops=2)
+                     Index Cond: (course_id = o.course_id)
+                     Buffers: shared hit=4
+ Planning:
+   Buffers: shared hit=85 read=1
+ Planning Time: 0.935 ms
+ Execution Time: 0.220 ms
+(39 rows)
+
+Time: 1.447 ms
+==============================================================
+PHASE 5 — Aggregate query (Seq Scan stays optimal)
+==============================================================
+--- Q5 (avg FINAL score per course) — expect Seq Scan regardless ---
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=91.58..91.66 rows=30 width=78) (actual time=18.512..18.520 rows=30 loops=1)
+   Buffers: shared hit=2739
+   ->  Sort  (cost=91.58..91.90 rows=127 width=78) (actual time=18.510..18.516 rows=30 loops=1)
+         Sort Key: (round(avg(r.score), 2)) DESC NULLS LAST
+         Sort Method: top-N heapsort  Memory: 28kB
+         Buffers: shared hit=2739
+         ->  HashAggregate  (cost=85.93..87.83 rows=127 width=78) (actual time=18.422..18.469 rows=62 loops=1)
+               Group Key: c.course_code
+               Batches: 1  Memory Usage: 64kB
+               Buffers: shared hit=2739
+               ->  Nested Loop  (cost=23.25..84.97 rows=127 width=44) (actual time=0.335..10.799 rows=25929 loops=1)
+                     Buffers: shared hit=2739
+                     ->  Nested Loop  (cost=22.96..36.52 rows=5 width=42) (actual time=0.328..1.248 rows=508 loops=1)
+                           Buffers: shared hit=1032
+                           ->  Hash Join  (cost=22.81..35.24 rows=5 width=8) (actual time=0.323..0.559 rows=508 loops=1)
+                                 Hash Cond: (o.offering_id = e.offering_id)
+                                 Buffers: shared hit=16
+                                 ->  Seq Scan on course_offering o  (cost=0.00..11.08 rows=508 width=8) (actual time=0.007..0.070 rows=508 loops=1)
+                                       Buffers: shared hit=6
+                                 ->  Hash  (cost=22.75..22.75 rows=5 width=8) (actual time=0.311..0.312 rows=508 loops=1)
+                                       Buckets: 1024  Batches: 1  Memory Usage: 28kB
+                                       Buffers: shared hit=10
+                                       ->  Seq Scan on exam e  (cost=0.00..22.75 rows=5 width=8) (actual time=0.008..0.218 rows=508 loops=1)
+                                             Filter: ((exam_type)::text = 'FINAL'::text)
+                                             Rows Removed by Filter: 1016
+                                             Buffers: shared hit=10
+                           ->  Index Scan using course_pkey on course c  (cost=0.14..0.26 rows=1 width=42) (actual time=0.001..0.001 rows=1 loops=508)
+                                 Index Cond: (course_id = o.course_id)
+                                 Buffers: shared hit=1016
+                     ->  Index Scan using idx_result_exam on result r  (cost=0.29..9.18 rows=51 width=10) (actual time=0.002..0.011 rows=51 loops=508)
+                           Index Cond: (exam_id = e.exam_id)
+                           Buffers: shared hit=1707
+ Planning:
+   Buffers: shared hit=22
+ Planning Time: 0.518 ms
+ Execution Time: 18.582 ms
+(36 rows)
+
+Time: 19.723 ms
+02_explain_analyze.sql finished
